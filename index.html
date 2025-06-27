@@ -3,7 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khudadian Arsen — Digital Card</title>
+  <title>Khudadian Arsen</title>
+  <!-- Favicon и PWA -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="site.webmanifest">
+  <!-- Метаданные для SEO и соцсетей -->
+  <meta name="description" content="Визитка Khudadian Arsen — AI/IT-инженер, руководитель проектов, цифровой инжиниринг.">
+  <meta property="og:title" content="Khudadian Arsen">
+  <meta property="og:description" content="AI Engineering • Digital Innovation • Project Lead">
+  <meta property="og:image" content="photo.jpg">
+  <meta property="og:type" content="website">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;400&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -59,31 +71,18 @@
       padding-bottom: 28px;
       z-index: 1;
       position: relative;
-      animation: fadeIn 1.2s cubic-bezier(.16,.69,.27,1);
-    }
-    @keyframes fadeIn {
-      from { transform: translateY(40px) scale(0.98); opacity: 0; }
-      to   { transform: none; opacity: 1; }
-    }
-    .main-card::after {
-      content: '';
-      position: absolute;
-      z-index: 1;
-      inset: 0;
-      border-radius: 24px;
-      box-shadow: 0 0 0 0 rgba(64, 220, 220, 0.15);
-      animation: pulse 2.1s infinite cubic-bezier(.66,0,0,1);
-      pointer-events: none;
+      /* Пульсация: взято из index — копия.html */
+      animation: pulse 2.2s infinite;
     }
     @keyframes pulse {
       0% {
-        box-shadow: 0 0 0 0 rgba(64, 220, 220, 0.11);
+        box-shadow: 0 0 0 0 rgba(49, 232, 139, 0.18), 0 6px 36px 0 rgba(90,180,130,0.09);
       }
-      65% {
-        box-shadow: 0 0 0 26px rgba(64, 220, 220, 0.08);
+      50% {
+        box-shadow: 0 0 0 24px rgba(49, 232, 139, 0.09), 0 6px 36px 0 rgba(90,180,130,0.09);
       }
       100% {
-        box-shadow: 0 0 0 0 rgba(64, 220, 220, 0);
+        box-shadow: 0 0 0 0 rgba(49, 232, 139, 0.18), 0 6px 36px 0 rgba(90,180,130,0.09);
       }
     }
     .top-gradient {
