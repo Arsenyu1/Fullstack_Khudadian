@@ -15,9 +15,11 @@
   <meta property="og:image" content="photo.jpg">
   <meta property="og:type" content="website">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;400&display=swap" rel="stylesheet">
+  
   <script src="https://code.jquery.com/jquery-2.2.4.min.js"
           integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
           crossorigin="anonymous"></script>
+          
   <style>
     :root {
       --main-gradient: linear-gradient(120deg, #b9f3c6 0%, #fffecb 100%);
@@ -39,20 +41,25 @@
       overflow-x: hidden;
     }
     body {
-      background-color: black;
+      /* Цвет фона как на дашборде */
+      background-color: #020617; 
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
     }
+    
+    /* Настройки холста анимации */
     #bg-anim {
       position: fixed;
       z-index: 0;
       left: 0; top: 0;
       width: 100%;
       height: 100%;
+      pointer-events: none; /* Чтобы можно было кликать сквозь фон */
     }
+
     .main-card {
       background: var(--white);
       border-radius: 24px;
@@ -80,7 +87,7 @@
         box-shadow: 0 0 0 0 rgba(49, 232, 139, 0.18), 0 6px 36px 0 rgba(90,180,130,0.09);
       }
     }
-    /* Добавлено — сияющая анимация для кнопки */
+    /* Сияющая анимация для кнопки */
     @keyframes glowing {
       0% {
         box-shadow: 0 0 0 0 rgba(49,232,139, 0.4), 0 0 18px 4px #7afcf8;
@@ -296,7 +303,6 @@
       transition: background .16s, color .16s, transform .2s;
       text-decoration: none;
       z-index: 2;
-      /* Добавлено — сияющая анимация */
       animation: glowing 2.2s infinite;
     }
     .save-btn .logo-in-btn {
@@ -313,6 +319,7 @@
 </head>
 <body>
   <canvas id="bg-anim"></canvas>
+
   <div class="main-card">
     <div class="top-gradient"></div>
     <div class="profile-photo-block">
@@ -369,6 +376,7 @@
       </a>
     </div>
   </div>
+  
   <script type="text/javascript">
       if (!window.requestAnimationFrame) {
         window.requestAnimationFrame = (window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function (callback) {
@@ -390,13 +398,10 @@
                 color: 'rgba(255, 255, 255, .5)',
                 width: 0.2
               },
-              position: {
-                x: 0,
-                y: 0
-              },
+              position: { x: 0, y: 0 },
               width: window.innerWidth,
               height: window.innerHeight,
-              velocity: 0.3,
+              velocity: 0.1,
               length: 100,
               distance: 120,
               radius: 150,
@@ -418,21 +423,15 @@
               context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
               context.fill();
             },
-
             animate: function(){
-              var i;
-              for (i = 0; i < config.length; i++) {
+              for (var i = 0; i < config.length; i++) {
                 var star = config.stars[i];
-                if (star.y < 0 || star.y > canvas.height) {
-                  star.vy = - star.vy;
-                } else if (star.x < 0 || star.x > canvas.width) {
-                  star.vx = - star.vx;
-                }
+                if (star.y < 0 || star.y > canvas.height) star.vy = - star.vy;
+                else if (star.x < 0 || star.x > canvas.width) star.vx = - star.vx;
                 star.x += star.vx;
                 star.y += star.vy;
               }
             },
-
             line: function(){
               var length = config.length, iStar, jStar, i, j;
               for (i = 0; i < length; i++) {
@@ -479,13 +478,11 @@
             canvas.width = config.width;
             canvas.height = config.height;
           };
-
           this.setContext = function () {
             context.fillStyle = config.star.color;
             context.strokeStyle = config.line.color;
             context.lineWidth = config.line.width;
           };
-
           this.setInitialPosition = function () {
             if (!options || !options.hasOwnProperty('position')) {
               config.position = {
@@ -494,21 +491,27 @@
               };
             }
           };
-
           this.loop = function (callback) {
             callback();
             window.requestAnimationFrame(function () {
               this.loop(callback);
             }.bind(this));
           };
-
           this.bind = function () {
-            $canvas.on('mousemove', function(e){
-              config.position.x = e.pageX - $canvas.offset().left;
-              config.position.y = e.pageY - $canvas.offset().top;
+            $(window).on('mousemove', function(e){
+              config.position.x = e.clientX;
+              config.position.y = e.clientY;
+            });
+            $(window).on('resize', function() {
+                config.width = window.innerWidth;
+                config.height = window.innerHeight;
+                canvas.width = config.width;
+                canvas.height = config.height;
+                context.fillStyle = config.star.color;
+                context.strokeStyle = config.line.color;
+                context.lineWidth = config.line.width;
             });
           };
-
           this.init = function () {
             this.setCanvas();
             this.setContext();
@@ -517,7 +520,6 @@
             this.bind();
           };
         }
-
         $.fn.constellation = function (options) {
           return this.each(function () {
             var c = new Constellation(this, options);
@@ -526,17 +528,20 @@
         };
       })($, window);
 
+      // Инициализация с настройками как на дашборде
       $('#bg-anim').constellation({
         star: {
           color: 'rgba(50, 150, 255, 0.9)',
-          width: 4
+          width: 3 
         },
         line: {
           color: 'rgba(50, 150, 255, 0.7)',
           width: 0.5
         },
-        radius: 250
+        length: 250,  // Оптимальное количество
+        radius: 300,  // Широкий радиус реакции
+        distance: 90  // Аккуратные соединения
       });
-    </script>
+  </script>
 </body>
 </html>
