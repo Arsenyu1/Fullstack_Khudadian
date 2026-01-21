@@ -202,10 +202,30 @@
       margin: 0 auto 18px auto;
       max-width: 370px;
       padding: 13px 13px 10px 13px;
-      text-align: left;
+      text-align: center;
       box-shadow: 0 2px 8px rgba(180,220,170,0.07);
-      line-height: 1.43;
+      line-height: 1.55;
     }
+	.about-me a.shimmer-link {
+  font-weight: 600;
+  text-decoration: none;
+  background: linear-gradient(
+    90deg,
+    #3aa36b,
+    #9fe0b2,
+    #3aa36b
+  );
+  background-size: 200% auto;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: shimmer 2.2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
     .contacts {
       width: 100%;
       display: grid;
@@ -335,13 +355,37 @@
       <div class="slogan">AI Engineering • Digital Innovation • Project Lead</div>
       <div class="slogan-ru">Цифровой инжиниринг • Автоматизация • Руководство проектами</div>
       <div class="about-me">
-        <b>AI/IT-инженер, руководитель проектов и разработчик.</b> <br>
-        8+ лет в управлении проектами, инжиниринге, автоматизации и цифровизации производства.<br>
-        Эксперт по проектированию, САПР (SmartPlant Spoolgen, AutoCAD, Navisworks).<br>
-        Python, C#, VBA, API, SQL, Power Query, макросы.<br>
-        Внедрение и настройка цифровых инструментов для промышленного строительства, интеграция корпоративных БД, обучение команд.<br>
-        Инженерные системы, контроль проектной и рабочей документации, цифровизация документооборота, наставничество.
-      </div>
+  <b>AI / IT-инженер · Руководитель проектов · Разработчик</b><br><br>
+
+8+ лет в инжиниринге и цифровизации промышленного строительства.<br>
+Проектирование и автоматизация инженерных процессов,<br>
+внедрение цифровых решений <b>«под ключ»</b>.<br><br>
+
+<b>Экспертиза</b><br>
+САПР и координация моделей: SmartPlant Spoolgen, AutoCAD, Navisworks.<br>
+Разработка и автоматизация: Python, C#, VBA, SQL, API, Power Query.<br>
+Собственные программы и инструменты автоматизации рабочих процессов.<br>
+Интеграция корпоративных БД, цифровизация документооборота,<br>
+обучение и наставничество команд.<br><br>
+
+Внедрение
+<a href="https://skaniks.ru/news/sistema-iskusstvennogo-analiza-sia"
+   target="_blank"
+   class="shimmer-link">
+  СИА — системы искусственного анализа
+</a><br><br>
+
+🏆 Проект СИА отмечен премией
+<a href="https://gsprom.ru/media/news/korporativnye-novosti/siayushchiy-effekt/"
+   target="_blank"
+   class="shimmer-link">
+  «Digital Awards»
+</a><br><br>
+
+🏅 Победитель научно-практических конференций<br>
+в области автоматизации, моделирования и искусственного интеллекта
+
+</div>
     </div>
     <div class="contacts">
       <a class="contact-btn" href="tel:+79667878333">
