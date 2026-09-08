@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Khudadian Arsen</title>
-  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -519,7 +519,7 @@
             var length = config.length, star, i;
             context.clearRect(0, 0, canvas.width, canvas.height);
             for (i = 0; i < length; i++) {
-              config.stars.push(new Star());
+              if (!config.stars[i]) config.stars[i] = new Star();
               star = config.stars[i];
               star.create();
             }
