@@ -1,0 +1,25 @@
+name: Export GitVerse package
+
+on:
+  push:
+    branches:
+      - gitverse-export
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create ZIP for GitVerse
+        run: |
+          zip -r Fullstack_Khudadian_GitVerse.zip . -x ".git/*" ".github/*"
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitverse-site
+          path: Fullstack_Khudadian_GitVerse.zip
+          if-no-files-found: error
