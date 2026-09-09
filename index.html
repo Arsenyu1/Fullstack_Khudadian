@@ -9,9 +9,9 @@
   <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="manifest" href="site.webmanifest">
-  <meta name="description" content="Визитка Khudadian Arsen — AI/IT-инженер, руководитель проектов, цифровой инжиниринг.">
+  <meta name="description" content="Визитка Khudadian Arsen — руководитель цифровизации и автоматизации инженерных процессов, Digital Engineering, Software & Data.">
   <meta property="og:title" content="Khudadian Arsen">
-  <meta property="og:description" content="AI Engineering • Digital Innovation • Project Lead">
+  <meta property="og:description" content="Digital Engineering • Industrial Automation • Software & Data">
   <meta property="og:image" content="photo.jpg">
   <meta property="og:type" content="website">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;400&display=swap" rel="stylesheet">
@@ -365,21 +365,21 @@
     </div>
     <div class="info-block">
       <div class="name">Khudadian Arsen</div>
-      <div class="position">FullStack Developer/Разработчик</div>
+      <div class="position">Руководитель цифровизации и автоматизации инженерных процессов</div>
       <div class="company">ГАЗСТРОЙПРОМ, Санкт-Петербург</div>
-      <div class="slogan">AI Engineering • Digital Innovation • Project Lead</div>
+      <div class="slogan">Digital Engineering • Industrial Automation • Software & Data</div>
       <div class="slogan-ru">Цифровой инжиниринг • Автоматизация • Руководство проектами</div>
       <div class="about-me">
-  <b>AI / IT-инженер · Руководитель проектов · Разработчик</b><br><br>
-8+ лет в инжиниринге и цифровизации промышленного строительства.<br>
-Проектирование и автоматизация инженерных процессов,<br>
-внедрение цифровых решений <b>«под ключ»</b>.<br><br>
+  <b>Руководитель цифровизации · Technical Lead · Software Engineer</b><br><br>
+В промышленном строительстве и инженерных системах с 2018 года.<br>
+Цифровизация и автоматизация инженерных процессов,<br>
+разработка и внедрение прикладных IT-решений, включая системы искусственного интеллекта.<br><br>
 <b>Экспертиза</b><br>
-САПР и координация моделей: SmartPlant Spoolgen, AutoCAD, Navisworks.<br>
-Разработка и автоматизация: Python, C#, VBA, SQL, API, Power Query.<br>
-Собственные программы и инструменты автоматизации рабочих процессов.<br>
-Интеграция корпоративных БД, цифровизация документооборота,<br>
-обучение и наставничество команд.<br><br>
+Digital Engineering: SmartPlant Spoolgen, AutoCAD, Navisworks.<br>
+Software & Data: Python, FastAPI, C#, SQL, API, ETL, Power Query.<br>
+Внутренние web-сервисы и инструменты проверки инженерных данных.<br>
+Автоматизация отчётности и производственных процессов,<br>
+управление проектами, командами и внедрением IT-решений.<br><br>
 Внедрение
 <a href="https://skaniks.ru/news/sistema-iskusstvennogo-analiza-sia"
    target="_blank"
@@ -392,7 +392,7 @@
    class="shimmer-link">
   «Digital Awards»
 </a><br><br>
-🏅 Победитель научно-практических конференций<br>
+🏅 Участник профессиональных IT- и Data-конференций<br>
 в области автоматизации, моделирования и искусственного интеллекта
 </div>
     </div>
@@ -430,171 +430,6 @@
     </div>
   </div>
   
-  <script type="text/javascript">
-      if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = (window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function (callback) {
-          return window.setTimeout(callback, 1000 / 60);
-        });
-      }
-
-      (function ($, window) {
-        function Constellation (canvas, options) {
-          var $canvas = $(canvas),
-            context = canvas.getContext('2d'),
-            defaults = {
-              star: {
-                color: 'rgba(255, 255, 255, .5)',
-                width: 1,
-                randomWidth: true
-              },
-              line: {
-                color: 'rgba(255, 255, 255, .5)',
-                width: 0.2
-              },
-              position: { x: 0, y: 0 },
-              width: window.innerWidth,
-              height: window.innerHeight,
-              velocity: 0.1,
-              length: 100,
-              distance: 120,
-              radius: 150,
-              stars: []
-            },
-            config = $.extend(true, {}, defaults, options);
-
-          function Star () {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.vx = (config.velocity - (Math.random() * 0.5));
-            this.vy = (config.velocity - (Math.random() * 0.5));
-            this.radius = config.star.randomWidth ? (Math.random() * config.star.width) : config.star.width;
-          }
-
-          Star.prototype = {
-            create: function(){
-              context.beginPath();
-              context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-              context.fill();
-            },
-            animate: function(){
-              for (var i = 0; i < config.length; i++) {
-                var star = config.stars[i];
-                if (star.y < 0 || star.y > canvas.height) star.vy = - star.vy;
-                else if (star.x < 0 || star.x > canvas.width) star.vx = - star.vx;
-                star.x += star.vx;
-                star.y += star.vy;
-              }
-            },
-            line: function(){
-              var length = config.length, iStar, jStar, i, j;
-              for (i = 0; i < length; i++) {
-                for (j = 0; j < length; j++) {
-                  iStar = config.stars[i];
-                  jStar = config.stars[j];
-                  if (
-                    (iStar.x - jStar.x) < config.distance &&
-                    (iStar.y - jStar.y) < config.distance &&
-                    (iStar.x - jStar.x) > - config.distance &&
-                    (iStar.y - jStar.y) > - config.distance
-                  ) {
-                    if (
-                      (iStar.x - config.position.x) < config.radius &&
-                      (iStar.y - config.position.y) < config.radius &&
-                      (iStar.x - config.position.x) > - config.radius &&
-                      (iStar.y - config.position.y) > - config.radius
-                    ) {
-                      context.beginPath();
-                      context.moveTo(iStar.x, iStar.y);
-                      context.lineTo(jStar.x, jStar.y);
-                      context.stroke();
-                      context.closePath();
-                    }
-                  }
-                }
-              }
-            }
-          };
-
-          this.createStars = function () {
-            var length = config.length, star, i;
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            for (i = 0; i < length; i++) {
-              if (!config.stars[i]) config.stars[i] = new Star();
-              star = config.stars[i];
-              star.create();
-            }
-            star.line();
-            star.animate();
-          };
-
-          this.setCanvas = function () {
-            canvas.width = config.width;
-            canvas.height = config.height;
-          };
-          this.setContext = function () {
-            context.fillStyle = config.star.color;
-            context.strokeStyle = config.line.color;
-            context.lineWidth = config.line.width;
-          };
-          this.setInitialPosition = function () {
-            if (!options || !options.hasOwnProperty('position')) {
-              config.position = {
-                x: canvas.width * 0.5,
-                y: canvas.height * 0.5
-              };
-            }
-          };
-          this.loop = function (callback) {
-            callback();
-            window.requestAnimationFrame(function () {
-              this.loop(callback);
-            }.bind(this));
-          };
-          this.bind = function () {
-            $(window).on('mousemove', function(e){
-              config.position.x = e.clientX;
-              config.position.y = e.clientY;
-            });
-            $(window).on('resize', function() {
-                config.width = window.innerWidth;
-                config.height = window.innerHeight;
-                canvas.width = config.width;
-                canvas.height = config.height;
-                context.fillStyle = config.star.color;
-                context.strokeStyle = config.line.color;
-                context.lineWidth = config.line.width;
-            });
-          };
-          this.init = function () {
-            this.setCanvas();
-            this.setContext();
-            this.setInitialPosition();
-            this.loop(this.createStars);
-            this.bind();
-          };
-        }
-        $.fn.constellation = function (options) {
-          return this.each(function () {
-            var c = new Constellation(this, options);
-            c.init();
-          });
-        };
-      })($, window);
-
-      // Инициализация с настройками как на дашборде
-      $('#bg-anim').constellation({
-        star: {
-          color: 'rgba(50, 150, 255, 0.9)',
-          width: 3 
-        },
-        line: {
-          color: 'rgba(50, 150, 255, 0.7)',
-          width: 0.5
-        },
-        length: 250,  // Оптимальное количество
-        radius: 300,  // Широкий радиус реакции
-        distance: 90  // Аккуратные соединения
-      });
-  </script>
+  <script src="./starfield.js"></script>
 </body>
 </html>
