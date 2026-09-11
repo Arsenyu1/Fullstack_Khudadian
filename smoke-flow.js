@@ -61,7 +61,7 @@
     }
     const advect = program(`
       uniform sampler2D velocity, source;
-      uniform float dt, decay;
+      uniform float dt, decay, elapsed;
       void main() {
         if (solid(uv)) { result = vec4(0.0); return; }
         vec2 from = uv - texture(velocity, uv).xy * texel * dt;
@@ -73,13 +73,13 @@
           }
           from = safe;
         }
-        result = texture(source, clamp(from, texel * .5, 1.0 - texel * .5)) * exp(-decay * dt);
+        result = texture(source, clamp(from, texel * .5, 1.0 - texel * .5)) * exp(-decay * elapsed);
       }`);
     const inject = program(`
       uniform sampler2D source;
       uniform vec2 startPoint, endPoint;
       uniform vec3 amount;
-      uniform float radius;
+      uniform float radius, densityLimit;
       void main() {
         if (solid(uv)) { result = vec4(0.0); return; }
         vec2 p = uv * viewport, a = startPoint * viewport, b = endPoint * viewport;
@@ -87,7 +87,10 @@
         float t = clamp(dot(p - a, ab) / max(dot(ab, ab), .0001), 0.0, 1.0);
         vec2 offset = p - a - t * ab;
         float weight = exp(-dot(offset, offset) / (radius * radius));
-        result = vec4(texture(source, uv).xyz + amount * weight, 1.0);
+        vec3 value = texture(source, uv).xyz + amount * weight;
+        float peak = max(value.r,max(value.g,value.b));
+        if (densityLimit > 0.0 && peak > densityLimit) value *= densityLimit / peak;
+        result = vec4(value, 1.0);
       }`);
     const curlPass = program(`
       uniform sampler2D velocity;
@@ -112,7 +115,8 @@
         gradient /= max(length(gradient), .0001);
         vec2 force = gradient * vec2(1,-1) * texture(curl,uv).x * 22.0;
         vec2 speed = texture(velocity,uv).xy + force * dt;
-        result = vec4(clamp(speed,vec2(-650),vec2(650)),0,1);
+        speed *= min(1.0, 900.0 / max(length(speed * texel * viewport), .001));
+        result = vec4(speed,0,1);
       }`);
     const divergencePass = program(`
       uniform sampler2D velocity;
@@ -150,10 +154,11 @@
     const show = program(`
       uniform sampler2D density;
       void main() {
-        // Preserve the reference's direct RGB brightness over a transparent background.
-        vec3 ink = clamp(texture(density,uv).rgb,0.0,1.0);
-        float alpha = max(ink.r,max(ink.g,ink.b));
-        vec3 color = ink / max(alpha,.001);
+        // Keep the full color palette, with soft highlights instead of opaque clipping.
+        vec3 ink = max(texture(density,uv).rgb,0.0);
+        float peak = max(ink.r,max(ink.g,ink.b));
+        float alpha = .9 * (1.0-exp(-min(peak,1.4)*1.65));
+        vec3 color = ink / max(peak,.001);
         result = vec4(color,alpha * smoothstep(0.0,3.0,distanceToCard(uv)));
       }`);
     gl.deleteShader(vs);
@@ -217,21 +222,22 @@
       if(distance<.08) return;
       const duration=Math.max(dt,1/144), speed=Math.min(distance/duration,2200);
       const points={startPoint:[from.x/width,1-from.y/height],endPoint:[to.x/width,1-to.y/height],radius:Math.max(10,Math.min(height*.032,30))};
-      const impulse=.35*dt*60;
-      run(inject,velocity.write,{source:velocity.read,...points,amount:[dx/distance*speed*sw/width*impulse,-dy/distance*speed*sh/height*impulse,0]}); velocity.swap();
-      const strength=.3*dt*60;
-      run(inject,density.write,{source:density.read,...points,amount:color.map(c=>c*strength)}); density.swap();
+      const stableDt=Math.min(dt,1/60),impulse=.35*stableDt*60;
+      run(inject,velocity.write,{source:velocity.read,...points,densityLimit:0,amount:[dx/distance*speed*sw/width*impulse,-dy/distance*speed*sh/height*impulse,0]}); velocity.swap();
+      const strength=.3*stableDt*60*Math.min(1,speed/100);
+      run(inject,density.write,{source:density.read,...points,densityLimit:1.4,amount:color.map(c=>c*strength)}); density.swap();
     }
     function step(dt) {
       if(!velocity || gl.isContextLost()) return;
-      run(advect,velocity.write,{velocity:velocity.read,source:velocity.read,dt,decay:.65}); velocity.swap();
+      const elapsed=Math.min(dt,.25);dt=Math.min(dt,1/60);
+      run(advect,velocity.write,{velocity:velocity.read,source:velocity.read,dt,elapsed,decay:.85}); velocity.swap();
       run(curlPass,curl,{velocity:velocity.read});
       run(swirlPass,velocity.write,{velocity:velocity.read,curl,dt}); velocity.swap();
       run(divergencePass,divergence,{velocity:velocity.read});
       // Warm-start pressure, followed by a fixed bounded number of Jacobi passes.
       for(let i=0;i<20;i++){run(pressurePass,pressure.write,{pressure:pressure.read,divergence});pressure.swap();}
       run(project,velocity.write,{pressure:pressure.read,velocity:velocity.read}); velocity.swap();
-      run(advect,density.write,{velocity:velocity.read,source:density.read,dt,decay:1.02}); density.swap();
+      run(advect,density.write,{velocity:velocity.read,source:density.read,dt,elapsed,decay:1.35}); density.swap();
       run(show,null,{density:density.read});
     }
     function clear() {

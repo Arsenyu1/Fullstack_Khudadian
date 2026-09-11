@@ -26,7 +26,7 @@
   const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
   let w=1,h=1,mobile=false,dirty=true,resizePending=false,raf=0,last=0,time=0;
   let rect={left:0,right:0,top:0,bottom:0,radius:24};
-  let target=null,pointer=null,demoStart=0,lastInk=-20,frame=0,nextSpark=.8,graphAt=-1;
+  let target=null,pointer=null,demoStart=0,lastInkAt=-10000,frame=0,nextSpark=.8,graphAt=-1;
   let samples=0,smokeTicks=0,statsAt=0,frameCost=0,inkVisible=false;
   const frameGaps=[];
   const stars=[],edges=new Map(),puffs=[];
@@ -182,6 +182,7 @@
   function tick(now) {
     raf=0;if(document.hidden)return;
     const begin=performance.now(),gap=now-(last||now-16.67),dt=clamp(gap/1000,.001,.05);last=now;
+    if(gap>250){resetPointer();smoke?.clear();inkVisible=false;}
     if(preview){frameGaps.push(gap);if(frameGaps.length>120)frameGaps.shift();}
     if(resizePending)resize();else if(dirty)readBoundary();
     const speed=reduced.matches?.22:1;time+=dt*speed;
@@ -202,12 +203,12 @@
         if(smoke && !contextLost)smoke.splat(before,pointer,dt,smokeColor);
         else if(puffs.length<100)puffs.push({x:pointer.x,y:pointer.y,vx:(pointer.x-before.x)/dt*.16,vy:(pointer.y-before.y)/dt*.16,r:12,life:1.7,
           color:smokeColor.map(channel=>Math.round(channel/Math.max(...smokeColor)*255)).join(',')});
-        lastInk=time;
+        lastInkAt=now;
       }
     }
     const steps=Math.max(1,Math.ceil(dt/(1/60)));
     for(let i=0;i<steps;i++)moveStars(dt*speed/steps);
-    if(smoke && !contextLost && !reduced.matches && time-lastInk<6){smoke.step(dt);smokeTicks++;inkVisible=true;}
+    if(smoke && !contextLost && !reduced.matches && now-lastInkAt<3500){smoke.step(Math.max(dt,Math.min(gap/1000,.25)));smokeTicks++;inkVisible=true;}
     else if(inkVisible){smoke?.clear();inkVisible=false;}
     draw(dt*speed);frame++;
     frameCost=frameCost*.94+(performance.now()-begin)*.06;
@@ -235,7 +236,7 @@
   addEventListener('scroll',()=>{dirty=true;resetPointer();},{passive:true});
   if(window.ResizeObserver)new ResizeObserver(()=>{dirty=true;}).observe(card);
   document.addEventListener('visibilitychange',()=>{
-    if(document.hidden){cancelAnimationFrame(raf);raf=0;resetPointer();}
+    if(document.hidden){cancelAnimationFrame(raf);raf=0;resetPointer();smoke?.clear();inkVisible=false;}
     else {dirty=true;start();}
   });
   const motionChange=()=>{resetPointer();smoke?.clear();start();};
